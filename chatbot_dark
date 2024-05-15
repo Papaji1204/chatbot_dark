@@ -1,0 +1,51 @@
+**CHATBOT_DARK**
+**ChatBot Code**
+import os
+from chatterbot import ChatBot
+from chatterbot.trainers import ChatterBotCorpusTrainer
+
+# Create a new chatbot instance
+chatbot = ChatBot(
+    'My ChatBot',
+    storage_adapter='chatterbot.storage.SQLStorageAdapter',
+    logic_adapters=[
+        'chatterbot.logic.BestMatch',
+        'chatterbot.logic.MathematicalEvaluation'
+    ],
+    database_uri='sqlite:///database.sqlite3'
+)
+
+# Create a trainer for the chatbot
+trainer = ChatterBotCorpusTrainer(chatbot)
+
+# Train the chatbot based on the english corpus
+trainer.train("chatterbot.corpus.english")
+
+# Train the chatbot based on a custom corpus
+trainer.train([
+    "chatterbot.corpus.custom.corpus_file.yml"
+])
+
+# Define a function to get a response from the chatbot
+def get_response(user_input):
+    response = chatbot.get_response(user_input)
+    return response
+
+# Test the chatbot
+while True:
+    user_input = input("You: ")
+    response = get_response(user_input)
+    print("ChatBot: ", response)
+categories:
+  - greetings
+conversations:
+  - - Hello
+    - Hi, how are you?
+  - - Hi
+    - Hello, what's up?
+  - - Hey
+    - Hey, how's it going?
+  - - What's your name?
+    - My name is My ChatBot.
+  - - Who are you?
+    - I'm My ChatBot, nice to meet you!
